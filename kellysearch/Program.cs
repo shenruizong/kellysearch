@@ -35,7 +35,7 @@ namespace kellysearch
         /// <param name="url">需要查询的地址</param>
         private void GetUrl(string url)
         {
-
+            
         }
         /// <summary>
         /// 获取公司传真
