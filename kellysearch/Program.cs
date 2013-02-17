@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
 
 namespace kellysearch
 {
@@ -35,7 +36,10 @@ namespace kellysearch
         /// <param name="url">需要查询的地址</param>
         private void GetUrl(string url)
         {
-            
+            WebClient client = new WebClient();
+            string html = client.DownloadString(url);
+            JumonyParser jp = new JumonyParser();
+            IHtmlDocument document = jp.Parse(html);
         }
         /// <summary>
         /// 获取公司传真
