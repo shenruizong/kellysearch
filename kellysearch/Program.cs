@@ -6,6 +6,7 @@ using System.Net;
 using Ivony.Html.Parser;
 using Ivony.Html;
 using System.Data;
+using System.Threading;
 
 namespace kellysearch
 {
@@ -32,6 +33,7 @@ namespace kellysearch
                     p.GetFax();
                     break;
             }
+            Console.ReadLine();
         }
         /// <summary>
         /// 获取公司地址
@@ -97,35 +99,46 @@ namespace kellysearch
         private void GetFax()
         {
             faxDataSetTableAdapters.kellysearch_faxTableAdapter apt = new faxDataSetTableAdapters.kellysearch_faxTableAdapter();
-            DataTable dt = apt.GetData();
+            DataTable dt = apt.GetDataBy();
             DataRow[] rows = dt.Select();
             foreach (DataRow row in rows)
             {
-                WebClient client = new WebClient();
-                string html = client.DownloadString(row["url"].ToString());
-                JumonyParser jp = new JumonyParser();
-                IHtmlDocument document = jp.Parse(html);
-                IEnumerable<IHtmlElement> htmlRows = document.Find(".tel");
-                foreach (IHtmlElement abc in htmlRows)
-                {
-                    string fax = abc.InnerText();
-                    int i = fax.IndexOf("fax");
-                    int length = fax.Length;
-                    if (i > -1)
-                    {
-                        i = i+3;
-                        string sub = fax.Substring(i, length - i);
-                        sub = sub.Replace("+1", "");
-                        sub = sub.Replace("+", "");
-                        sub = sub.Replace("(", "");
-                        sub = sub.Replace(")", "");
-                        sub = sub.Replace(" ", "");
-                        sub = sub.Replace(".", "");
-                        sub = sub.Replace("-", "");
-                        Console.WriteLine(sub);
-                    }
-                }
+                ThreadPool.QueueUserWorkItem(new WaitCallback(CallBack), row);
 
+            }
+        }
+        private void CallBack(object obj)
+        {
+            DataRow row = (DataRow)obj;
+            WebClient client = new WebClient();
+            string html = client.DownloadString(row["url"].ToString());
+            JumonyParser jp = new JumonyParser();
+            IHtmlDocument document = jp.Parse(html);
+            IEnumerable<IHtmlElement> htmlRows = document.Find(".tel");
+            foreach (IHtmlElement abc in htmlRows)
+            {
+                string fax = abc.InnerText();
+                int i = fax.IndexOf("fax");
+                int length = fax.Length;
+                string faxnum = "无";
+                if (i > -1)
+                {
+                    i = i + 3;
+                    string sub = fax.Substring(i, length - i);
+                    sub = sub.Replace("+1", "");
+                    sub = sub.Replace("+", "");
+                    sub = sub.Replace("(", "");
+                    sub = sub.Replace(")", "");
+                    sub = sub.Replace(" ", "");
+                    sub = sub.Replace(".", "");
+                    sub = sub.Replace("-", "");
+                    row["fax"] = sub;
+                    faxnum = sub;
+                    
+                }
+                row["status"] = 1;
+                new faxDataSetTableAdapters.kellysearch_faxTableAdapter().Update(row);
+                Console.WriteLine(faxnum);
             }
         }
     }
