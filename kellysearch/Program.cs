@@ -62,9 +62,9 @@ namespace kellysearch
             for (int i = 1; i <= maxPage; i++)
             {
                 
-                    url = url + "&page=" + i;
+                    string urls = url + "&page=" + i;
                     WebClient client = new WebClient();
-                    string html = client.DownloadString(url);
+                    string html = client.DownloadString(urls);
                     JumonyParser jp = new JumonyParser();
                     IHtmlDocument document = jp.Parse(html);
                     IEnumerable<IHtmlElement> rows = document.Find(".searchresult_zonee .heading_address a");
@@ -96,7 +96,37 @@ namespace kellysearch
         /// </summary>
         private void GetFax()
         {
- 
+            faxDataSetTableAdapters.kellysearch_faxTableAdapter apt = new faxDataSetTableAdapters.kellysearch_faxTableAdapter();
+            DataTable dt = apt.GetData();
+            DataRow[] rows = dt.Select();
+            foreach (DataRow row in rows)
+            {
+                WebClient client = new WebClient();
+                string html = client.DownloadString(row["url"].ToString());
+                JumonyParser jp = new JumonyParser();
+                IHtmlDocument document = jp.Parse(html);
+                IEnumerable<IHtmlElement> htmlRows = document.Find(".tel");
+                foreach (IHtmlElement abc in htmlRows)
+                {
+                    string fax = abc.InnerText();
+                    int i = fax.IndexOf("fax");
+                    int length = fax.Length;
+                    if (i > -1)
+                    {
+                        i = i+3;
+                        string sub = fax.Substring(i, length - i);
+                        sub = sub.Replace("+1", "");
+                        sub = sub.Replace("+", "");
+                        sub = sub.Replace("(", "");
+                        sub = sub.Replace(")", "");
+                        sub = sub.Replace(" ", "");
+                        sub = sub.Replace(".", "");
+                        sub = sub.Replace("-", "");
+                        Console.WriteLine(sub);
+                    }
+                }
+
+            }
         }
     }
 }
