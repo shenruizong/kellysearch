@@ -399,10 +399,10 @@ namespace kellysearch {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public kellysearch_faxRow Addkellysearch_faxRow(int id, string name, string url, string fax, int status) {
+            public kellysearch_faxRow Addkellysearch_faxRow(string name, string url, string fax, int status) {
                 kellysearch_faxRow rowkellysearch_faxRow = ((kellysearch_faxRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        id,
+                        null,
                         name,
                         url,
                         fax,
@@ -414,10 +414,9 @@ namespace kellysearch {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public kellysearch_faxRow FindByidfax(int id, string fax) {
+            public kellysearch_faxRow FindByid(int id) {
                 return ((kellysearch_faxRow)(this.Rows.Find(new object[] {
-                            id,
-                            fax})));
+                            id})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -458,12 +457,14 @@ namespace kellysearch {
                 this.columnstatus = new global::System.Data.DataColumn("status", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnstatus);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnid,
-                                this.columnfax}, true));
+                                this.columnid}, true));
+                this.columnid.AutoIncrement = true;
+                this.columnid.AutoIncrementSeed = -1;
+                this.columnid.AutoIncrementStep = -1;
                 this.columnid.AllowDBNull = false;
+                this.columnid.Unique = true;
                 this.columnname.MaxLength = 255;
                 this.columnurl.MaxLength = 255;
-                this.columnfax.AllowDBNull = false;
                 this.columnfax.MaxLength = 255;
             }
             
@@ -652,7 +653,12 @@ namespace kellysearch {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string fax {
                 get {
-                    return ((string)(this[this.tablekellysearch_fax.faxColumn]));
+                    try {
+                        return ((string)(this[this.tablekellysearch_fax.faxColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("表“kellysearch_fax”中列“fax”的值为 DBNull。", e);
+                    }
                 }
                 set {
                     this[this.tablekellysearch_fax.faxColumn] = value;
@@ -697,6 +703,18 @@ namespace kellysearch {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SeturlNull() {
                 this[this.tablekellysearch_fax.urlColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsfaxNull() {
+                return this.IsNull(this.tablekellysearch_fax.faxColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetfaxNull() {
+                this[this.tablekellysearch_fax.faxColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -879,7 +897,7 @@ namespace kellysearch.faxDataSetTableAdapters {
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::MySql.Data.MySqlClient.MySqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `kellysearch_fax` WHERE ((`id` = @Original_id) AND ((@IsNull_name = 1 AND `name` IS NULL) OR (`name` = @Original_name)) AND ((@IsNull_url = 1 AND `url` IS NULL) OR (`url` = @Original_url)) AND (`fax` = @Original_fax) AND ((@IsNull_status = 1 AND `status` IS NULL) OR (`status` = @Original_status)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `kellysearch_fax` WHERE ((`id` = @Original_id) AND ((@IsNull_name = 1 AND `name` IS NULL) OR (`name` = @Original_name)) AND ((@IsNull_url = 1 AND `url` IS NULL) OR (`url` = @Original_url)) AND ((@IsNull_fax = 1 AND `fax` IS NULL) OR (`fax` = @Original_fax)) AND ((@IsNull_status = 1 AND `status` IS NULL) OR (`status` = @Original_status)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             global::MySql.Data.MySqlClient.MySqlParameter param = new global::MySql.Data.MySqlClient.MySqlParameter();
             param.ParameterName = "@Original_id";
@@ -924,6 +942,15 @@ namespace kellysearch.faxDataSetTableAdapters {
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
             param = new global::MySql.Data.MySqlClient.MySqlParameter();
+            param.ParameterName = "@IsNull_fax";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.MySqlDbType = global::MySql.Data.MySqlClient.MySqlDbType.Int32;
+            param.IsNullable = true;
+            param.SourceColumn = "fax";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            param.SourceColumnNullMapping = true;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::MySql.Data.MySqlClient.MySqlParameter();
             param.ParameterName = "@Original_fax";
             param.DbType = global::System.Data.DbType.String;
             param.MySqlDbType = global::MySql.Data.MySqlClient.MySqlDbType.VarChar;
@@ -950,16 +977,9 @@ namespace kellysearch.faxDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(param);
             this._adapter.InsertCommand = new global::MySql.Data.MySqlClient.MySqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO `kellysearch_fax` (`id`, `name`, `url`, `fax`, `status`) VALUES (@id," +
-                " @name, @url, @fax, @status)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO `kellysearch_fax` (`name`, `url`, `fax`, `status`) VALUES (@name, @ur" +
+                "l, @fax, @status)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
-            param = new global::MySql.Data.MySqlClient.MySqlParameter();
-            param.ParameterName = "@id";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.MySqlDbType = global::MySql.Data.MySqlClient.MySqlDbType.Int32;
-            param.IsNullable = true;
-            param.SourceColumn = "id";
-            this._adapter.InsertCommand.Parameters.Add(param);
             param = new global::MySql.Data.MySqlClient.MySqlParameter();
             param.ParameterName = "@name";
             param.DbType = global::System.Data.DbType.String;
@@ -990,15 +1010,8 @@ namespace kellysearch.faxDataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::MySql.Data.MySqlClient.MySqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE `kellysearch_fax` SET `id` = @id, `name` = @name, `url` = @url, `fax` = @fax, `status` = @status WHERE ((`id` = @Original_id) AND ((@IsNull_name = 1 AND `name` IS NULL) OR (`name` = @Original_name)) AND ((@IsNull_url = 1 AND `url` IS NULL) OR (`url` = @Original_url)) AND (`fax` = @Original_fax) AND ((@IsNull_status = 1 AND `status` IS NULL) OR (`status` = @Original_status)))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE `kellysearch_fax` SET `name` = @name, `url` = @url, `fax` = @fax, `status` = @status WHERE ((`id` = @Original_id) AND ((@IsNull_name = 1 AND `name` IS NULL) OR (`name` = @Original_name)) AND ((@IsNull_url = 1 AND `url` IS NULL) OR (`url` = @Original_url)) AND ((@IsNull_fax = 1 AND `fax` IS NULL) OR (`fax` = @Original_fax)) AND ((@IsNull_status = 1 AND `status` IS NULL) OR (`status` = @Original_status)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
-            param = new global::MySql.Data.MySqlClient.MySqlParameter();
-            param.ParameterName = "@id";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.MySqlDbType = global::MySql.Data.MySqlClient.MySqlDbType.Int32;
-            param.IsNullable = true;
-            param.SourceColumn = "id";
-            this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::MySql.Data.MySqlClient.MySqlParameter();
             param.ParameterName = "@name";
             param.DbType = global::System.Data.DbType.String;
@@ -1068,6 +1081,15 @@ namespace kellysearch.faxDataSetTableAdapters {
             param.IsNullable = true;
             param.SourceColumn = "url";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::MySql.Data.MySqlClient.MySqlParameter();
+            param.ParameterName = "@IsNull_fax";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.MySqlDbType = global::MySql.Data.MySqlClient.MySqlDbType.Int32;
+            param.IsNullable = true;
+            param.SourceColumn = "fax";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            param.SourceColumnNullMapping = true;
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::MySql.Data.MySqlClient.MySqlParameter();
             param.ParameterName = "@Original_fax";
@@ -1218,18 +1240,20 @@ namespace kellysearch.faxDataSetTableAdapters {
                 this.Adapter.DeleteCommand.Parameters[4].Value = ((string)(Original_url));
             }
             if ((Original_fax == null)) {
-                throw new global::System.ArgumentNullException("Original_fax");
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[5].Value = ((string)(Original_fax));
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((string)(Original_fax));
             }
             if ((Original_status.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[7].Value = ((int)(Original_status.Value));
+                this.Adapter.DeleteCommand.Parameters[7].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[8].Value = ((int)(Original_status.Value));
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[7].Value = global::System.DBNull.Value;
+                this.Adapter.DeleteCommand.Parameters[7].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[8].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1251,31 +1275,30 @@ namespace kellysearch.faxDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(int id, string name, string url, string fax, global::System.Nullable<int> status) {
-            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(id));
+        public virtual int Insert(string name, string url, string fax, global::System.Nullable<int> status) {
             if ((name == null)) {
+                this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[0].Value = ((string)(name));
+            }
+            if ((url == null)) {
                 this.Adapter.InsertCommand.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(name));
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(url));
             }
-            if ((url == null)) {
+            if ((fax == null)) {
                 this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(url));
-            }
-            if ((fax == null)) {
-                throw new global::System.ArgumentNullException("fax");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(fax));
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(fax));
             }
             if ((status.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((int)(status.Value));
+                this.Adapter.InsertCommand.Parameters[3].Value = ((int)(status.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1297,53 +1320,54 @@ namespace kellysearch.faxDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(int id, string name, string url, string fax, global::System.Nullable<int> status, int Original_id, string Original_name, string Original_url, string Original_fax, global::System.Nullable<int> Original_status) {
-            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(id));
+        public virtual int Update(string name, string url, string fax, global::System.Nullable<int> status, int Original_id, string Original_name, string Original_url, string Original_fax, global::System.Nullable<int> Original_status) {
             if ((name == null)) {
+                this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(name));
+            }
+            if ((url == null)) {
                 this.Adapter.UpdateCommand.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(name));
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(url));
             }
-            if ((url == null)) {
+            if ((fax == null)) {
                 this.Adapter.UpdateCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(url));
-            }
-            if ((fax == null)) {
-                throw new global::System.ArgumentNullException("fax");
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(fax));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(fax));
             }
             if ((status.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(status.Value));
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(status.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Original_id));
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(Original_id));
             if ((Original_name == null)) {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[7].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_name));
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Original_name));
             }
             if ((Original_url == null)) {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[9].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[8].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_url));
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_url));
             }
             if ((Original_fax == null)) {
-                throw new global::System.ArgumentNullException("Original_fax");
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[10].Value = global::System.DBNull.Value;
             }
             else {
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(0));
                 this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(Original_fax));
             }
             if ((Original_status.HasValue == true)) {
@@ -1368,14 +1392,6 @@ namespace kellysearch.faxDataSetTableAdapters {
                     this.Adapter.UpdateCommand.Connection.Close();
                 }
             }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string name, string url, global::System.Nullable<int> status, int Original_id, string Original_name, string Original_url, string Original_fax, global::System.Nullable<int> Original_status) {
-            return this.Update(Original_id, name, url, Original_fax, status, Original_id, Original_name, Original_url, Original_fax, Original_status);
         }
     }
     
